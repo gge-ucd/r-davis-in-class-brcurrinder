@@ -72,7 +72,7 @@ mloa2 <- mloa_2001 %>%
 plot_temp <- function(monthtoinput, dat = mloa2){
   df <- filter(dat, month == monthtoinput)
   plot <- df %>% 
-    ggplot()+ geom_line(aes(x=datetime, y = temp_C_2m), color = "blue")+
+    ggplot()+ geom_line(aes(x=datetime, y = temp_C_2m), color = "blue") +
     theme_bw()
   return(plot)
 }

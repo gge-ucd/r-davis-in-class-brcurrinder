@@ -1,0 +1,53 @@
+---
+title: "week_9_Rmarkdown"
+author: "Bryan Currinder"
+date: "March 5, 2019"
+output:
+  html_document: default
+  pdf_document: default
+editor_options: 
+  chunk_output_type: console
+---
+
+This is an Rmarkdown document. 
+
+**This is bold** *This is italic*
+
+##This will make the font bigger
+###This will make the font slightly smaller
+
+```{r, warning = FALSE, message = FALSE}
+suppressPackageStartupMessages(library(tidyverse))
+glimpse(storms)
+
+library("viridis")
+
+ggplot(data=storms)+
+  geom_jitter(aes(x= as.factor(month), y = pressure, fill = wind), pch = 21, alpha = 0.05)+
+  scale_fill_viridis_c()+
+  theme_bw()+
+  labs(title= "Hurricane Pressure v Month", subtitle = "with Max Wind Speed", x = "Month")
+```
+
+Writing out equations in Rmarkdown:
+
+If you want to write an equation, you put a $ on either side of it.
+
+$\sum_{i=y}^n X_i$
+
+```{r}
+library(knitr)
+kable(head(storms), caption = "Table using Kable")
+htmlTable::htmlTable(head(storms))
+
+#make an interactive table
+DT::datatable(storms)
+
+library(plotly)
+ggplotly(ggplot(data=storms)+
+  geom_jitter(aes(x= as.factor(month), y = pressure, fill = wind), pch = 21, alpha = 0.05)+
+  scale_fill_viridis_c()+
+  theme_bw()+
+  labs(title= "Hurricane Pressure v Month", subtitle = "with Max Wind Speed", x = "Month"))
+```
+
