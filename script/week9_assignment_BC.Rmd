@@ -1,0 +1,44 @@
+---
+title: "week9_assignment_BC.Rmd"
+author: "Bryan Currinder"
+date: "3/11/2019"
+output: html_document
+---
+
+I am broadly interested in how climate change impacts mountain aquatic ecosystems, specifically through the lens of aquatic invertebrates. At the moment, my research revolves around the following question for Sierra Nevada aquatic systems: **how are aquatic invertebrate communities responding to abiotic changes in mountain watersheds (e.g. water temperature, phenological changes in snowmelt), and how are these responses mediated by landscape factors?** Some of my focal study species include mayflies like *Callibaetis ferrugineus* and *Ameletus edmundsii*. 
+![](https://user-images.githubusercontent.com/46472749/51150139-e236c500-1819-11e9-85a9-61665c32df3c.jpg)
+
+```{r message = FALSE, warning = FALSE}
+#plotly graph
+library(plotly)
+library(tidyverse)
+glimpse(storms)
+
+plotly::ggplotly(ggplot(data=storms)+
+  geom_point(aes(x = wind, y = pressure, color = status)))
+```
+
+```{r}
+#htmlTable
+table_means <- storms %>%
+  drop_na(ts_diameter, hu_diameter) %>% 
+  group_by(status) %>% 
+  summarise(mean_wind = mean(wind), mean_pressure = mean(pressure), mean_ts = mean(ts_diameter), mean_hu = mean(hu_diameter))
+
+table_means$mean_wind <- round(table_means$mean_wind, digits = 2)
+table_means$mean_pressure <- round(table_means$mean_pressure, digits = 2)
+table_means$mean_ts <- round(table_means$mean_ts, digits = 2)
+table_means$mean_hu <- round(table_means$mean_hu, digits = 2)
+
+htmlTable::htmlTable(table_means)
+```
+
+```{r}
+#Challenge
+hurricane_length <- storms %>% 
+  filter(status == "hurricane", year >= 2010) %>% 
+  group_by(name, year) %>% 
+  summarise(num_days = diff(range(day)))
+  
+map2_chr(.x = hurricane_length$name, .y = hurricane_length$num_days, function(x,y) paste("Hurricane", x, "lasted", y, "days"))
+```
